@@ -251,7 +251,7 @@ padding:70px 25px;
 <header>
 
 <h1>Polimorfisme dan Abstraksi</h1>
-<p>Resume Materi OOP Dart - Sesi 2</p>
+<p>Resume Materi OOP Dart - Sesi 4</p>
 
 <div class="identity">
 Nama: <b>M. Bagas Khoirullah</b> | NIM: <b>251410016</b>
@@ -288,56 +288,56 @@ class Kucing extends Hewan {
 
 </section>
 
-<section id="jenis">
+<section id="pengantarpolimorfisme">
 
-<h2>Jenis Constructor</h2>
+<h2>Pengantar Polimorfisme</h2>
 
 <div class="card">
 
 <ul>
-<li>Default Constructor: ClassName( )</li>
-<li>Named Constructor: ClassName.nama( )</li>
-<li>Parameterized Constructor: ClassName(this.param)</li>
-<li>Constant Constructor: const ClassName( )</li>
-<li>Factory Constructor: (akan dibahas di sesi lanjut)</li>
+<li>Arti: "Banyak bentuk" (poly = banyak, morph = bentuk)( )</li>
+<li>Konsep: Objek dari subclass dapat diperlakukan sebagai objek dari superclass( )</li>
+<li>Contoh: Semua Kucing , Anjing , Burung adalah Hewan</li>
+<li>Tipe:
+          i. Compile-time polymorphism: Method overloading (tidak didukung Dart)
+          ii. Runtime polymorphism: Method overriding (didukung Dart)( )</li>
 </ul>
 
 </div>
 
 </section>
 
-<section id="named">
+<section id="polimorfisme">
 
-<h2>Named Constructor</h2>
+<h2>Polimorfisme dengan Inheritance</h2>
 
 <div class="card">
 
+<ul>
+  
+<li>Referensi tipe parent dapat menampung objek child</li>
+
+</ul>
+
 <pre>
-class Mobil {
-  String? merk;
-  int? tahun;
-  
-// Parameterized constructor
-Mobil(this.merk, this.tahun);
-  
-// Named constructor
-Mobil.baru() {
-  merk = 'Toyota';
-  tahun = 2023;
+class Bentuk {
+  void gambar() => print('Menggambar bentuk');
 }
-  
-// Named constructor dengan parameter
-Mobil.dariJson(Map<String, dynamic> json) {
-  merk = json['merk'];
-  tahun = json['tahun'];
+class Lingkaran extends Bentuk {
+  @override
+  void gambar() => print('Menggambar lingkaran');
 }
-  
-// Override toString for better print output
-@override
-String toString() {
-  return 'Mobil{merk: $merk, tahun: $tahun}';
-  }
+class Persegi extends Bentuk {
+  @override
+  void gambar() => print('Menggambar persegi');
 }
+void main() {
+  Bentuk bentuk1 = Lingkaran();  // Polimorfisme
+  Bentuk bentuk2 = Persegi();    // Polimorfisme
+  bentuk1.gambar();  // Output: Menggambar lingkaran
+  bentuk2.gambar();  // Output: Menggambar persegi
+}
+
 </pre>
 
 <button class="btn" onclick="openDartpad('https://dartpad.dev/2164e4c471b07cb8fb2a1a1586c0f18a')">Jalankan di DartPad</button>
@@ -345,96 +345,47 @@ String toString() {
 
 </section>
 
-<section id="constant">
+<section id="manfaat">
 
-<h2>Constant Constructor</h2>
+<h2>Manfaat Polimorfisme</h2>
 
 <div class="card">
 
 <ul>
-<li>Digunakan untuk objek yang immutable (tidak berubah)</li>
-<li>Semua field harus final</li>
-<li>Menghemat memory untuk objek yang sama</li>
+<li>Fleksibilitas: Kode dapat bekerja dengan berbagai tipe</li>
+<li>Extensibility: Mudah menambah tipe baru</li>
+<li>Code Reusability: Method umum di superclass</li>
+<li>Maintainability: Perubahan mudah dikelola</li>
 </ul>
-
-<pre id="code3">
-class Warna {
-  final int r, g, b;
-  const Warna(this.r, this.g, this.b);
-  @override
-  String toString() {
-  return 'Warna(r: $r, g: $g, b: $b)';
-  }
-}
-void main() {
-  const merah = Warna(255, 0, 0);
-  const merahLagi = Warna(255, 0, 0); // Menggunakan instance yang sama di memory
-  print(merah);
-  print(merahLagi);
-}
-</pre>
-
-<button class="btn" onclick="openDartpad('https://dartpad.dev/8ce0e22d44732f6d6564bcde70863f1e')">Jalankan di DartPad</button>
 
 </div>
 
 </section>
 
-<section id="initializer">
+<section id="is">
 
-<h2>Initializer List</h2>
+<h2>is dan as Operator</h2>
 
 <div class="card">
 
 <ul>
-<li>Menginisialisasi field sebelum constructor body dieksekusi.</li>
-<li>Redirecting Contructor.(pertemuan 11/buku bab 9).</li>
-<li>Berguna untuk inisialisasi final field atau validasi.</li>
+<li>is : Mengecek tipe objek</li>
+<li>as : Casting tipe objek</li>
 </ul>
   
 <pre id="code4">
-class Titik {
-  final double x,y;
-  
-  Titik(double x,double y)
-  : x = x.abs(),
-    y = y.abs() {
-  print('Titik dibuat');
-  }
+class Kendaraan {}
+class Mobil extends Kendaraan {
+  void klakson() => print('Tin!');
 }
-</pre>
-</div>
-
-</section>
-
-<section id="praktik1">
-
-<h2>Praktik 1 – Multiple Constructor</h2>
-
-<div class="card">
-
-<pre id="code5">
-// Nama   : M. Bagas Khoirullah
-// Nim    : 251410016
-// Kelas  : SI2A
-  
-class Mahasiswa {
-  String? nama;
-  int? umur;
-
-  Mahasiswa(this.nama,this.umur);
-  Mahasiswa.dariMap(Map data){
-  nama=data['nama'];
-  umur=data['umur'];
+void main() {
+  Kendaraan k = Mobil();
+  if (k is Mobil) {          
+  // Cek tipe
+  (k as Mobil).klakson();  // Casting
   }
-
-  Mahasiswa.tanpaNama(){
-
-  nama="Tanpa Nama";
-  umur=0;
-
-  }
-
+  // Safe casting dengan as?
+  (k as Mobil?)?.klakson();
 }
 </pre>
 
@@ -444,148 +395,140 @@ class Mahasiswa {
 
 </section>
 
-<section id="encapsulation">
+<section id="praktik1">
 
-<h2>Pengantar Enkapsulasi</h2>
+<h2>Praktik 1 – Polimorfisme dengan List</h2>
 
 <div class="card">
 
 <ul>
-<li>Konsep: Menyembunyikan detail implementasi dari luar.</li>
-<li>Tujuan: Keamanan data, Kontrol akses, Fleksibilitas perubahan</li>
-<li>Cara di Dart: Menggunakan underscore (_ ) untuk private members.</li>
+<li>Buat list List<Hewan></li>
+<li>Tambahkan berbagai objek subclass (Kucing , Anjing , Burung )</li>
+<li>Loop list, panggil method bersuara()</li>
 </ul>
 
 </div>
 
 </section>
 
-<section id="publicprivate">
+<section id="pengantarabstraksi">
 
-<h2>Public vs Private</h2>
+<h2>Pengantar Abstraksi</h2>
 
 <div class="card">
 
 <ul>
-<li>Public: Dapat diakses dari mana saja (default).</li>
-<li>Private: Hanya dapat diakses dalam file yang sama (gunakan _ ).</li>
+<li>Konsep: Menyembunyikan detail implementasi, hanya menunjukkan fungsionalitas</li>
+<li>Tujuan:
+        i. Fokus pada "apa" bukan "bagaimana"
+        ii. Kontrak yang harus dipenuhi
+        iii. Fleksibilitas implementasi</li>
+<li>Cara di Dart: abstract class dan interface</li>
 </ul>
 
-<pre>
-class Person {
-  String _name;
-  int age;
-  Person(this._name,this.age);
-  
-}
-</pre>
 </div>
 
 </section>
 
-<section id="getter">
+<section id="abstractclass">
 
-<h2>Getter</h2>
+<h2>Abstract Class</h2>
 
 <div class="card">
-  
+ 
 <ul>
-<li>Getter memungkinkan membaca data private dengan kontrol.</li>
-<li>Sintaks 1: tipeData get namaGetter => _field;</li>
-<li>Sintaks 2: tipeData namaGetter() { _field; }</li>
+<li>Tidak bisa diinstansiasi langsung</li>
+<li>Dapat memiliki method abstract (tanpa implementasi) dan concrete (dengan implementasi)</li>
 </ul>
 
 <pre id="code7">
-class Person {
-  String _name;
-  int age;
-  Person(this._name, this.age);
+abstract class Kendaraan {
+  String? merk;  // Field concrete
   
-  String get getName1 {
-  return _name;
+  void start();  // Method abstract
+  
+  void stop() {  // Method concrete
+    print('Kendaraan berhenti');
   }
-  
-  String getName() {
-  return _name;
+}
+class Mobil extends Kendaraan {
+  @override
+  void start() {
+    print('Mobil $merk menyala');
   }
 }
 </pre>
 
+<button class="btn" onclick="openDartpad('https://dartpad.dev/d0c36faa630d765037e8a6a2df688757')">Jalankan di DartPad</button>
+  
 </div>
 
 </section>
 
-<section id="setter">
+<section id=" abstractmethod">
 
-<h2>Setter</h2>
+<h2>Abstract Method</h2>
 
 <div class="card">
-  
+
 <ul>
-<li>Setter memungkinkan modifikasi data dengan validasi.</li>
-<li>Sintaks 1: set namaSetter(value) { ... }</li>
-<li>Sintaks 2: void namaSetter(value) { ... }</li>
+<li>Method tanpa body (implementasi)</li>
+<li>Harus di-override di subclass</li>
 </ul>
 
 <pre id="code8">
-class Person {
-  String _name;
-  int age;
-  Person(this._name, this.age);
+abstract class AlatMusik {
+  void mainkan();  // Abstract method
   
-  set setName1(String name) {
-    _name = name;
+  void info() {    // Concrete method
+  print('Ini adalah alat musik');
   }
+}
   
-  void setName(String name) {
-    _name = name;
-  }
-  
-  String getName() {
-    return _name;
+class Gitar extends AlatMusik {
+  @override
+  void mainkan() {
+    print('Jreng jreng...');
   }
 }
 
 </pre>
+  
+<button class="btn" onclick="openDartpad('https://dartpad.dev/d0c36faa630d765037e8a6a2df688757')">Jalankan di DartPad</button>
 
 </div>
 
 </section>
 
-<section id="validasi">
+<section id="interface">
 
-<h2>Getter & Setter dengan Validasi</h2>
+<h2>Interface di Dart</h2>
 
 <div class="card">
 
+<ul>
+<li>Fakta: sejak Dart 3.0 dart punya keyword interface</li>
+<li>Cara: Semua interface class adalah implicit interface</li>
+<li>Gunakan implements untuk mengimplementasi interface</li>
+</ul>
+  
 <pre id="code9">
-class Produk {
-  String _nama;
-  double _harga;
-  Produk(this._nama, this._harga);
-  // Getter
-  String get nama => _nama;
-  double get harga => _harga;
-  // Setter dengan validasi
-  set nama(String value) {
-    if (value.length >= 3) {
-      _nama = value;
-    } else {
-      print('Gagal memperbarui nama: Nama harus memiliki minimal 3 karakter.');
-    }
-  }
-
-  // Setter untuk harga (dipindahkan ke dalam kelas Produk)
-  set harga(double value) {
-    if (value > 0) {
-      _harga = value;
-    } else {
-      print('Gagal memperbarui harga: Harga harus lebih besar dari 0.');
-    }
-  }
+interface class Flyable {
+  void terbang() => print('Terbang...');
 }
-
+  
+class Bird implements Flyable {
+  @override
+  void terbang() => print('Burung terbang tinggi');
+}
+  
+  class Plane implements Flyable {
+    @override
+    void terbang() => print('Pesawat terbang cepat');
+}
 </pre>
+
+<button class="btn" onclick="openDartpad('https://dartpad.dev/d0c36faa630d765037e8a6a2df688757')">Jalankan di DartPad</button>
 
 </div>
 

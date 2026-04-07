@@ -465,7 +465,7 @@ class Mobil extends Kendaraan {
 
 </section>
 
-<section id=" abstractmethod">
+<section id="abstractmethod">
 
 <h2>Abstract Method</h2>
 
@@ -534,124 +534,170 @@ class Bird implements Flyable {
 
 </section>
 
-<section id="praktik2">
+<section id="perbedaan">
 
-<h2>Praktik 2 - Enkapsulasi Lengkap</h2>
-
-<div class="card">
-<pre id="code6">
-// Nama   : M. Bagas Khoirullah
-// Nim    : 251410016
-// Kelas  : SI2A
+<h2>Perbedaan extends vs implements</h2>
   
-class User {
+<div class="card">
+  
+<table>
+<tr>
+<th>Aspect</th>
+<th>extends</th>
+<th>implements</th>
+</tr>
 
-  String _username;
-  String _password;
-  String _email;
+<tr>
+<td>Hubungan</td>
+<td>"is-a"</td>
+<td>"can-do"</td>
+</tr>
 
-  User(this._username, this._password, this._email);
+<tr>
+<td>Inheritance</td>
+<td>Mewarisi implementasi</td>
+<td>Hanya kontrak</td>
+</tr>
 
-  // Getter
-  String get username => _username;
-  String get password => _password;
-  String get email => _email;
+<tr>
+<td>Method</td>
+<td>Bisa concrete/abstract</td>
+<td>Semua harus di-implement</td>
+</tr>
 
-  // Setter Username
-  set username(String value) {
-    if (value.length >= 5) {
-      _username = value;
-      print("Username berhasil diubah menjadi: $_username");
-    } else {
-      print("Username gagal diubah. Minimal 5 karakter.");
-    }
-  }
+<tr>
+<td>Inheritance Type</td>
+<td>Single inheritance</td>
+<td>Multiple inheritance</td>
+</tr>
 
-  // Setter Password
-  set password(String value) {
-    if (value.length >= 8) {
-      _password = value;
-      print("Password berhasil diubah.");
-    } else {
-      print("Password gagal diubah. Minimal 8 karakter.");
-    }
-  }
-
-  // Setter Email
-  set email(String value) {
-    if (value.contains("@")) {
-      _email = value;
-      print("Email berhasil diubah menjadi: $_email");
-    } else {
-      print("Email tidak valid. Harus mengandung '@'.");
-    }
-  }
-}
-
-void main() {
-
-  // Membuat objek
-  User user1 = User("bagas123", "password123", "bagas@email.com");
-
-  // Menampilkan data awal
-  print("Username: ${user1.username}");
-  print("Password: ${user1.password}");
-  print("Email: ${user1.email}");
-
-  print("");
-
-  // Mencoba mengubah data
-  user1.username = "bag";        // gagal
-  user1.username = "bagas_k";    // berhasil
-
-  user1.password = "123";        // gagal
-  user1.password = "secure123";  // berhasil
-
-  user1.email = "bagasemail";    // gagal
-  user1.email = "bagas@mail.com";// berhasil
-
-}
-</pre>
-
-<button class="btn" onclick="openDartpad('https://dartpad.dev/d8464fa4ad87a77aee476d278f439e56')">Jalankan di DartPad</button>
+</table>
 
 </div>
 
 </section>
 
-<section id="login">
+<section id="static">
 
-<h2>Studi Kasus Login</h2>
+<h2>Static Members dan Method</h2>
+
+<div class="card">
+
+<ul>
+<li>Static members adalah properti atau method yang dimiliki oleh class itu
+sendiri, bukan oleh objek class. Static member diakses langsung melalui
+class name.</li>
+<li>Properti dan method static sangat berguna untuk membuat utility class
+atau menyimpan konstanta yang terkait dengan class, sehingga dapat diakses
+langsung tanpa perlu membuat objek.</li>
+</ul>
+
+<pre id="code10">
+class MathUtils {
+  static double pi = 3.14;
+  static int add(int x, int y) {
+    return x + y;
+  }
+}
+  
+void main() {
+  print('Nilai pi : ${MathUtils.pi}');
+  print('Result : ${MathUtils.add(10, 20)}');
+}
+</pre>
+
+<button class="btn" onclick="openDartpad('https://dartpad.dev/aabf88a9b1aed4002903063658532203')">Jalankan di DartPad</button>
+
+</div>
+
+</section>
+
+<section id="praktik2">
+
+<h2>Praktik 2 – Sistem Pembayaran</h2>
 
 <div class="card">
 
 <pre id="code10">
-class User {
-  String _username;
-  String _password;
-  User(this._username, this._password);
-  String get username => _username;
-  bool login(String username, String password) {
-    return _username == username && _password == password;
-  }
+abstract class MetodePembayaran {
+  void bayar(double jumlah);
+}
   
-  void gantiPassword(String lama, String baru) {
-    if (_password == lama) { // Now _password refers to the instance variable of this User object
-      if (baru.length >= 8) {
-        _password = baru;
-        print('Password berhasil diubah.');
-      } else {
-        print('Gagal mengubah password: Password baru harus memiliki minimal 8 karakter.');
-      }
-    } else {
-      print('Gagal mengubah password: Password lama tidak sesuai.');
-    }
+class KartuKredit implements MetodePembayaran {
+  @override
+  void bayar(double jumlah) {
+  print('Bayar $jumlah dengan Kartu Kredit');
   }
 }
-
+  
+class EWallet implements MetodePembayaran {
+  @override
+  void bayar(double jumlah) {
+  print('Bayar $jumlah dengan E-Wallet');
+  }
+}
+  
+class Tunai implements MetodePembayaran {
+  @override
+  void bayar(double jumlah) {
+  print('Bayar $jumlah dengan Tunai');
+  }
+}
 </pre>
 
-<button class="btn" onclick="openDartpad('https://dartpad.dev/aabf88a9b1aed4002903063658532203')">Jalankan di DartPad</button>
+</div>
+
+</section>
+
+<section id="latihan">
+
+<h2>Studi Kasus: Sistem Bentuk Geometri</h2>
+
+<div class="card">
+<pre id="code7">
+abstract class Bentuk {
+  double hitungLuas();
+  double hitungKeliling();
+  
+  void info() {
+    print('Luas: ${hitungLuas()}, Keliling: ${hitungKeliling()}');
+  }
+}
+  
+class Persegi implements Bentuk {
+  double sisi;
+  Persegi(this.sisi);
+  
+  @override
+  double hitungLuas() => sisi * sisi;
+  
+  @override
+  double hitungKeliling() => 4 * sisi;
+  
+  @override
+  void info() {
+    print('Persegi dengan sisi ${sisi} memiliki luas ${hitungLuas()} dan keliling ${hitungKeliling()}.');
+  }
+}
+  
+class Lingkaran implements Bentuk {
+  double radius;
+  Lingkaran(this.radius);
+  
+  @override
+  double hitungLuas() => 3.14 * radius * radius;
+  
+  @override
+  double hitungKeliling() => 2 * 3.14 * radius;
+}
+  
+@override
+void info() {
+print('Lingkaran dengan radius ${radius} memiliki luas ${hitungLuas()} dan keliling ${hitungKeliling()}.');
+}
+</pre>
+
+<button class="btn" onclick="openDartpad('https://dartpad.dev/6a1409c9014e33f5b43b8aee6afd17d6')">Jalankan di DartPad</button>
 
 </div>
 
@@ -664,11 +710,10 @@ class User {
 <div class="card">
 
 <ul>
-
-<li>Dart memiliki berbagai constructor</li>
-<li>Enkapsulasi melindungi data</li>
-<li>Getter dan Setter mengontrol akses</li>
-
+<li>Polimorfisme: Objek child dapat diperlakukan sebagai parent</li>
+<li>Abstract class: Template dengan method abstract/concrete</li>
+<li>Interface: Kontrak yang harus diimplementasi</li>
+<li>Multiple inheritance: mewarisi fungsi dari dua atau lebih hierarki class yang berbeda</li>
 </ul>
 
 </div>
@@ -677,77 +722,23 @@ class User {
 
 <section id="latihan">
 
-<h2>Latihan</h2>
+<h2>Latihan:</h2>
 
 <div class="card">
-<pre id="code7">
-  
-// Nama   : M. Bagas Khoirullah
-// Nim    : 251410016
-// Kelas  : SI2A
-  
-class RekeningBank {
-
-  String _nomorRekening;
-  double _saldo;
-
-  // Constructor
-  RekeningBank(this._nomorRekening, this._saldo);
-
-  // Method untuk menambah saldo
-  void deposit(double jumlah) {
-    if (jumlah > 0) {
-      _saldo += jumlah;
-      print("Deposit berhasil: Rp$jumlah");
-    } else {
-      print("Jumlah deposit tidak valid.");
-    }
-  }
-
-  // Method untuk menarik saldo
-  void tarik(double jumlah) {
-    if (jumlah <= 0) {
-      print("Jumlah penarikan tidak valid.");
-    } else if (jumlah > _saldo) {
-      print("Saldo tidak mencukupi.");
-    } else {
-      _saldo -= jumlah;
-      print("Penarikan berhasil: Rp$jumlah");
-    }
-  }
-
-  // Method untuk mengecek saldo
-  void cekSaldo() {
-    print("Nomor Rekening : $_nomorRekening");
-    print("Saldo Saat Ini : Rp$_saldo");
-  }
-}
-
-void main() {
-
-  // Membuat objek rekening
-  RekeningBank rekening1 = RekeningBank("251410016", 900000);
-
-  print("=== Saldo Awal ===");
-  rekening1.cekSaldo();
-
-  print("\n=== Deposit ===");
-  rekening1.deposit(200000);
-
-  print("\n=== Tarik Saldo ===");
-  rekening1.tarik(100000);
-
-  print("\n=== Coba Tarik Melebihi Saldo ===");
-  rekening1.tarik(1000000);
-
-  print("\n=== Saldo Akhir ===");
-  rekening1.cekSaldo();
-
-}
-
-</pre>
-
-<button class="btn" onclick="openDartpad('https://dartpad.dev/6a1409c9014e33f5b43b8aee6afd17d6')">Jalankan di DartPad</button>
+1. Buat abstract/interface class bekerja() Pekerja dengan method abstract/non abstract
+2. Buat 3 class yang mengimplementasi: Programmer , Dokter , Guru
+3. Buat list List<Pekerja> dan demonstrasikan polimorfisme
+4. buat class "Tablet" (Mewarisi komputer,Kamera dan Telepon)
+5. Buat class MathUtils dengan static methods untuk factorial, cek bilanganprima, Membulatkan double ke desimal tertentu, Menghasilkan bilangan acak 
+   integer dan double dalam range [min, max], Menghitung rata-rata dari list angka, dan Menghitung median dari list angka
+<ul>
+<li>1. Buat abstract/interface class bekerja() Pekerja dengan method abstract/non abstract</li>
+<li>2. Buat 3 class yang mengimplementasi: Programmer , Dokter , Guru</li>
+<li>3. Buat list List<Pekerja> dan demonstrasikan polimorfisme</li>
+<li>4. buat class "Tablet" (Mewarisi komputer,Kamera dan Telepon)</li>
+<li>Buat class MathUtils dengan static methods untuk factorial, cek bilangan prima, Membulatkan double ke desimal tertentu, Menghasilkan bilangan acak 
+    integer dan double dalam range [min, max], Menghitung rata-rata dari list angka, dan Menghitung median dari list angka</li>
+</ul>
 
 </div>
 

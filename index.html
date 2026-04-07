@@ -1,1 +1,884 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Resume OOP Dart - Polimorfisme dan Abstraksi</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:#e2e8f0;
+}
+
+/* PROGRESS */
+
+#progress{
+position:fixed;
+top:0;
+left:0;
+height:4px;
+background:#38bdf8;
+width:0%;
+z-index:5000;
+}
+
+/* MENU */
+
+.menu-btn{
+position:fixed;
+top:15px;
+left:15px;
+font-size:22px;
+background:#38bdf8;
+border:none;
+padding:6px 12px;
+border-radius:6px;
+cursor:pointer;
+z-index:4000;
+display:none;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:260px;
+height:100%;
+background:#020617;
+padding:25px;
+position:fixed;
+left:0;
+top:0;
+overflow:auto;
+border-right:1px solid #1e293b;
+transition:0.3s;
+z-index:3000;
+}
+
+.sidebar h2{
+color:#38bdf8;
+margin-bottom:15px;
+}
+
+.sidebar input{
+width:100%;
+padding:8px;
+margin-bottom:15px;
+border-radius:6px;
+border:none;
+background:#0f172a;
+color:white;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+margin-bottom:6px;
+text-decoration:none;
+color:#cbd5f5;
+border-radius:6px;
+transition:0.2s;
+}
+
+.sidebar a:hover{
+background:#1e293b;
+}
+
+/* CONTENT */
+
+.content{
+max-width:900px;
+margin-left:260px;
+padding:40px;
+}
+
+header{
+margin-bottom:40px;
+}
+
+header h1{
+font-size:34px;
+color:#38bdf8;
+}
+
+.identity{
+margin-top:6px;
+opacity:0.8;
+}
+
+/* CARD */
+
+.card{
+background:#020617;
+border:1px solid #1e293b;
+border-radius:10px;
+padding:20px;
+margin-top:15px;
+transition:0.25s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+pre{
+background:#0f172a;
+padding:15px;
+border-radius:8px;
+overflow:auto;
+margin-top:10px;
+}
+
+/* BUTTON */
+
+.btn{
+margin-top:10px;
+padding:8px 14px;
+border:none;
+border-radius:6px;
+background:#38bdf8;
+cursor:pointer;
+}
+
+/* POPUP */
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+z-index:6000;
+}
+
+.modal-content{
+width:90%;
+height:90%;
+background:#020617;
+border-radius:10px;
+padding:20px;
+display:flex;
+flex-direction:column;
+}
+
+.modal-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+#dartpadFrame{
+flex:1;
+border:none;
+border-radius:8px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.menu-btn{
+display:block;
+}
+
+.sidebar{
+transform:translateX(-100%);
+}
+
+.sidebar.active{
+transform:translateX(0);
+}
+
+.content{
+margin-left:0;
+padding:70px 25px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="progress"></div>
+
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+<div class="sidebar">
+
+<h2>Daftar Isi</h2>
+
+<input type="text" placeholder="Cari..." onkeyup="searchMenu(this)">
+
+<a href="#review">Review Sesi 3 – Pewarisan</a>
+<a href="#pengantarpolimorfisme">Pengantar Polimorfisme</a>
+<a href="#polimorfisme">Polimorfisme dengan Inheritance</a>
+<a href="#manfaat">Manfaat Polimorfisme</a>
+<a href="#is">is dan as Operator</a>
+<a href="#praktik1">Praktik 1 – Polimorfisme dengan List</a>
+<a href="#pengantarabstraksi">Pengantar Abstraksi</a>
+<a href="#abstractclass">Abstract Class</a>
+<a href="#abstractmethod">Abstract Method</a>
+<a href="#interface">Interface di Dart</a>
+<a href="#perbedaan">Perbedaan extends vs implements</a>
+<a href="#static">Static Members dan Method</a>
+<a href="#praktik2">Praktik 2 – Sistem Pembayaran</a>
+<a href="#studi">Studi Kasus: Sistem Bentuk Geometri</a>
+<a href="#ringkasan">Ringkasan</a>
+<a href="#latihan">Latihan:</a>
+<a href="#challange">Challenge:</a>
+
+</div>
+
+<div class="content">
+
+<header>
+
+<h1>Polimorfisme dan Abstraksi</h1>
+<p>Resume Materi OOP Dart - Sesi 2</p>
+
+<div class="identity">
+Nama: <b>M. Bagas Khoirullah</b> | NIM: <b>251410016</b>
+</div>
+
+</header>
+
+<section id="review">
+
+<h2>Review Sesi 3 – Pewarisan</h2>
+
+<div class="card">
+
+<ul>
+<li>Inheritance: extends keyword</li>
+<li>super() untuk panggil constructor parent</li>
+<li>@override untuk override method</li>
+<li>Contoh cepat:</li>
+</ul>
+
+<pre id="code1">
+class Hewan {
+  void bersuara() => print('...');
+}
+class Kucing extends Hewan {
+  @override
+  void bersuara() => print('Meong');
+}
+</pre>
+
+<button class="btn" onclick="openDartpad('https://dartpad.dev/8ce0e22d44732f6d6564bcde70863f1e')">Jalankan di DartPad</button>
+  
+</div>
+
+</section>
+
+<section id="jenis">
+
+<h2>Jenis Constructor</h2>
+
+<div class="card">
+
+<ul>
+<li>Default Constructor: ClassName( )</li>
+<li>Named Constructor: ClassName.nama( )</li>
+<li>Parameterized Constructor: ClassName(this.param)</li>
+<li>Constant Constructor: const ClassName( )</li>
+<li>Factory Constructor: (akan dibahas di sesi lanjut)</li>
+</ul>
+
+</div>
+
+</section>
+
+<section id="named">
+
+<h2>Named Constructor</h2>
+
+<div class="card">
+
+<pre>
+class Mobil {
+  String? merk;
+  int? tahun;
+  
+// Parameterized constructor
+Mobil(this.merk, this.tahun);
+  
+// Named constructor
+Mobil.baru() {
+  merk = 'Toyota';
+  tahun = 2023;
+}
+  
+// Named constructor dengan parameter
+Mobil.dariJson(Map<String, dynamic> json) {
+  merk = json['merk'];
+  tahun = json['tahun'];
+}
+  
+// Override toString for better print output
+@override
+String toString() {
+  return 'Mobil{merk: $merk, tahun: $tahun}';
+  }
+}
+</pre>
+
+<button class="btn" onclick="openDartpad('https://dartpad.dev/2164e4c471b07cb8fb2a1a1586c0f18a')">Jalankan di DartPad</button>
+</div>
+
+</section>
+
+<section id="constant">
+
+<h2>Constant Constructor</h2>
+
+<div class="card">
+
+<ul>
+<li>Digunakan untuk objek yang immutable (tidak berubah)</li>
+<li>Semua field harus final</li>
+<li>Menghemat memory untuk objek yang sama</li>
+</ul>
+
+<pre id="code3">
+class Warna {
+  final int r, g, b;
+  const Warna(this.r, this.g, this.b);
+  @override
+  String toString() {
+  return 'Warna(r: $r, g: $g, b: $b)';
+  }
+}
+void main() {
+  const merah = Warna(255, 0, 0);
+  const merahLagi = Warna(255, 0, 0); // Menggunakan instance yang sama di memory
+  print(merah);
+  print(merahLagi);
+}
+</pre>
+
+<button class="btn" onclick="openDartpad('https://dartpad.dev/8ce0e22d44732f6d6564bcde70863f1e')">Jalankan di DartPad</button>
+
+</div>
+
+</section>
+
+<section id="initializer">
+
+<h2>Initializer List</h2>
+
+<div class="card">
+
+<ul>
+<li>Menginisialisasi field sebelum constructor body dieksekusi.</li>
+<li>Redirecting Contructor.(pertemuan 11/buku bab 9).</li>
+<li>Berguna untuk inisialisasi final field atau validasi.</li>
+</ul>
+  
+<pre id="code4">
+class Titik {
+  final double x,y;
+  
+  Titik(double x,double y)
+  : x = x.abs(),
+    y = y.abs() {
+  print('Titik dibuat');
+  }
+}
+</pre>
+</div>
+
+</section>
+
+<section id="praktik1">
+
+<h2>Praktik 1 – Multiple Constructor</h2>
+
+<div class="card">
+
+<pre id="code5">
+// Nama   : M. Bagas Khoirullah
+// Nim    : 251410016
+// Kelas  : SI2A
+  
+class Mahasiswa {
+  String? nama;
+  int? umur;
+
+  Mahasiswa(this.nama,this.umur);
+  Mahasiswa.dariMap(Map data){
+  nama=data['nama'];
+  umur=data['umur'];
+  }
+
+  Mahasiswa.tanpaNama(){
+
+  nama="Tanpa Nama";
+  umur=0;
+
+  }
+
+}
+</pre>
+
+<button class="btn" onclick="openDartpad('https://dartpad.dev/d0c36faa630d765037e8a6a2df688757')">Jalankan di DartPad</button>
+
+</div>
+
+</section>
+
+<section id="encapsulation">
+
+<h2>Pengantar Enkapsulasi</h2>
+
+<div class="card">
+
+<ul>
+<li>Konsep: Menyembunyikan detail implementasi dari luar.</li>
+<li>Tujuan: Keamanan data, Kontrol akses, Fleksibilitas perubahan</li>
+<li>Cara di Dart: Menggunakan underscore (_ ) untuk private members.</li>
+</ul>
+
+</div>
+
+</section>
+
+<section id="publicprivate">
+
+<h2>Public vs Private</h2>
+
+<div class="card">
+
+<ul>
+<li>Public: Dapat diakses dari mana saja (default).</li>
+<li>Private: Hanya dapat diakses dalam file yang sama (gunakan _ ).</li>
+</ul>
+
+<pre>
+class Person {
+  String _name;
+  int age;
+  Person(this._name,this.age);
+  
+}
+</pre>
+</div>
+
+</section>
+
+<section id="getter">
+
+<h2>Getter</h2>
+
+<div class="card">
+  
+<ul>
+<li>Getter memungkinkan membaca data private dengan kontrol.</li>
+<li>Sintaks 1: tipeData get namaGetter => _field;</li>
+<li>Sintaks 2: tipeData namaGetter() { _field; }</li>
+</ul>
+
+<pre id="code7">
+class Person {
+  String _name;
+  int age;
+  Person(this._name, this.age);
+  
+  String get getName1 {
+  return _name;
+  }
+  
+  String getName() {
+  return _name;
+  }
+}
+</pre>
+
+</div>
+
+</section>
+
+<section id="setter">
+
+<h2>Setter</h2>
+
+<div class="card">
+  
+<ul>
+<li>Setter memungkinkan modifikasi data dengan validasi.</li>
+<li>Sintaks 1: set namaSetter(value) { ... }</li>
+<li>Sintaks 2: void namaSetter(value) { ... }</li>
+</ul>
+
+<pre id="code8">
+class Person {
+  String _name;
+  int age;
+  Person(this._name, this.age);
+  
+  set setName1(String name) {
+    _name = name;
+  }
+  
+  void setName(String name) {
+    _name = name;
+  }
+  
+  String getName() {
+    return _name;
+  }
+}
+
+</pre>
+
+</div>
+
+</section>
+
+<section id="validasi">
+
+<h2>Getter & Setter dengan Validasi</h2>
+
+<div class="card">
+
+<pre id="code9">
+class Produk {
+  String _nama;
+  double _harga;
+  Produk(this._nama, this._harga);
+  // Getter
+  String get nama => _nama;
+  double get harga => _harga;
+  // Setter dengan validasi
+  set nama(String value) {
+    if (value.length >= 3) {
+      _nama = value;
+    } else {
+      print('Gagal memperbarui nama: Nama harus memiliki minimal 3 karakter.');
+    }
+  }
+
+  // Setter untuk harga (dipindahkan ke dalam kelas Produk)
+  set harga(double value) {
+    if (value > 0) {
+      _harga = value;
+    } else {
+      print('Gagal memperbarui harga: Harga harus lebih besar dari 0.');
+    }
+  }
+}
+
+</pre>
+
+</div>
+
+</section>
+
+<section id="praktik2">
+
+<h2>Praktik 2 - Enkapsulasi Lengkap</h2>
+
+<div class="card">
+<pre id="code6">
+// Nama   : M. Bagas Khoirullah
+// Nim    : 251410016
+// Kelas  : SI2A
+  
+class User {
+
+  String _username;
+  String _password;
+  String _email;
+
+  User(this._username, this._password, this._email);
+
+  // Getter
+  String get username => _username;
+  String get password => _password;
+  String get email => _email;
+
+  // Setter Username
+  set username(String value) {
+    if (value.length >= 5) {
+      _username = value;
+      print("Username berhasil diubah menjadi: $_username");
+    } else {
+      print("Username gagal diubah. Minimal 5 karakter.");
+    }
+  }
+
+  // Setter Password
+  set password(String value) {
+    if (value.length >= 8) {
+      _password = value;
+      print("Password berhasil diubah.");
+    } else {
+      print("Password gagal diubah. Minimal 8 karakter.");
+    }
+  }
+
+  // Setter Email
+  set email(String value) {
+    if (value.contains("@")) {
+      _email = value;
+      print("Email berhasil diubah menjadi: $_email");
+    } else {
+      print("Email tidak valid. Harus mengandung '@'.");
+    }
+  }
+}
+
+void main() {
+
+  // Membuat objek
+  User user1 = User("bagas123", "password123", "bagas@email.com");
+
+  // Menampilkan data awal
+  print("Username: ${user1.username}");
+  print("Password: ${user1.password}");
+  print("Email: ${user1.email}");
+
+  print("");
+
+  // Mencoba mengubah data
+  user1.username = "bag";        // gagal
+  user1.username = "bagas_k";    // berhasil
+
+  user1.password = "123";        // gagal
+  user1.password = "secure123";  // berhasil
+
+  user1.email = "bagasemail";    // gagal
+  user1.email = "bagas@mail.com";// berhasil
+
+}
+</pre>
+
+<button class="btn" onclick="openDartpad('https://dartpad.dev/d8464fa4ad87a77aee476d278f439e56')">Jalankan di DartPad</button>
+
+</div>
+
+</section>
+
+<section id="login">
+
+<h2>Studi Kasus Login</h2>
+
+<div class="card">
+
+<pre id="code10">
+class User {
+  String _username;
+  String _password;
+  User(this._username, this._password);
+  String get username => _username;
+  bool login(String username, String password) {
+    return _username == username && _password == password;
+  }
+  
+  void gantiPassword(String lama, String baru) {
+    if (_password == lama) { // Now _password refers to the instance variable of this User object
+      if (baru.length >= 8) {
+        _password = baru;
+        print('Password berhasil diubah.');
+      } else {
+        print('Gagal mengubah password: Password baru harus memiliki minimal 8 karakter.');
+      }
+    } else {
+      print('Gagal mengubah password: Password lama tidak sesuai.');
+    }
+  }
+}
+
+</pre>
+
+<button class="btn" onclick="openDartpad('https://dartpad.dev/aabf88a9b1aed4002903063658532203')">Jalankan di DartPad</button>
+
+</div>
+
+</section>
+
+<section id="ringkasan">
+
+<h2>Ringkasan</h2>
+
+<div class="card">
+
+<ul>
+
+<li>Dart memiliki berbagai constructor</li>
+<li>Enkapsulasi melindungi data</li>
+<li>Getter dan Setter mengontrol akses</li>
+
+</ul>
+
+</div>
+
+</section>
+
+<section id="latihan">
+
+<h2>Latihan</h2>
+
+<div class="card">
+<pre id="code7">
+  
+// Nama   : M. Bagas Khoirullah
+// Nim    : 251410016
+// Kelas  : SI2A
+  
+class RekeningBank {
+
+  String _nomorRekening;
+  double _saldo;
+
+  // Constructor
+  RekeningBank(this._nomorRekening, this._saldo);
+
+  // Method untuk menambah saldo
+  void deposit(double jumlah) {
+    if (jumlah > 0) {
+      _saldo += jumlah;
+      print("Deposit berhasil: Rp$jumlah");
+    } else {
+      print("Jumlah deposit tidak valid.");
+    }
+  }
+
+  // Method untuk menarik saldo
+  void tarik(double jumlah) {
+    if (jumlah <= 0) {
+      print("Jumlah penarikan tidak valid.");
+    } else if (jumlah > _saldo) {
+      print("Saldo tidak mencukupi.");
+    } else {
+      _saldo -= jumlah;
+      print("Penarikan berhasil: Rp$jumlah");
+    }
+  }
+
+  // Method untuk mengecek saldo
+  void cekSaldo() {
+    print("Nomor Rekening : $_nomorRekening");
+    print("Saldo Saat Ini : Rp$_saldo");
+  }
+}
+
+void main() {
+
+  // Membuat objek rekening
+  RekeningBank rekening1 = RekeningBank("251410016", 900000);
+
+  print("=== Saldo Awal ===");
+  rekening1.cekSaldo();
+
+  print("\n=== Deposit ===");
+  rekening1.deposit(200000);
+
+  print("\n=== Tarik Saldo ===");
+  rekening1.tarik(100000);
+
+  print("\n=== Coba Tarik Melebihi Saldo ===");
+  rekening1.tarik(1000000);
+
+  print("\n=== Saldo Akhir ===");
+  rekening1.cekSaldo();
+
+}
+
+</pre>
+
+<button class="btn" onclick="openDartpad('https://dartpad.dev/6a1409c9014e33f5b43b8aee6afd17d6')">Jalankan di DartPad</button>
+
+</div>
+
+</section>
+
+</div>
+
+<div id="modal" class="modal">
+
+<div class="modal-content">
+
+<div class="modal-header">
+<h3>DartPad</h3>
+<span onclick="closeModal()">✖</span>
+</div>
+
+<iframe id="dartpadFrame" style="width:100%;height:100%;"></iframe>
+
+</div>
+
+</div>
+
+<script>
+
+function openDartpad(link){
+
+document.getElementById("dartpadFrame").src = link;
+
+document.getElementById("modal").style.display = "flex";
+
+}
+
+function closeModal(){
+
+document.getElementById("modal").style.display="none";
+
+}
+
+function toggleMenu(){
+
+document.querySelector(".sidebar").classList.toggle("active");
+
+}
+
+function searchMenu(input){
+
+let filter=input.value.toLowerCase();
+
+document.querySelectorAll(".sidebar a").forEach(link=>{
+
+let text=link.innerText.toLowerCase();
+
+link.style.display=text.includes(filter)?"block":"none";
+
+});
+
+}
+
+window.onscroll=function(){
+
+let winScroll=document.documentElement.scrollTop;
+let height=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+
+let scrolled=(winScroll/height)*100;
+
+document.getElementById("progress").style.width=scrolled+"%";
+
+}
+
+</script>
+
+</body>
+</html>
+
+
+
+ 

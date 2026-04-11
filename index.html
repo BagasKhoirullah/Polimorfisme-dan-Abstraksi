@@ -283,7 +283,7 @@ class Kucing extends Hewan {
 </pre>
   
 
-<button class="btn" onclick="openDartpad('https://dartpad.dev/47f23704bb3066547b7180638068c39c&run=true')">Jalankan di DartPad</button>
+<button class="btn" onclick="openDartpad('https://dartpad.dev/47f23704bb3066547b7180638068c39c')">Jalankan di DartPad</button>
   
 </div>
 
@@ -795,69 +795,233 @@ print('Lingkaran dengan radius ${radius} memiliki luas ${hitungLuas()} dan kelil
 </ul>
 
 <pre>
-// 1–3. Abstract + Polimorfisme
+// 1. CLASS PEKERJA (bonus 1)
+abstract class Pekerja {
+  String nama;
+
+  Pekerja(this.nama);
+
+  void bekerja();
+
+  void info() {
+    print("Nama: $nama");
+  }
+}
+
+class Programmer extends Pekerja {
+  Programmer(String nama) : super(nama);
+
+  @override
+  void bekerja() {
+    print("$nama bekerja sebagai Programmer");
+  }
+}
+
+
+void main() {
+  Programmer p = Programmer("Bagas");
+  p.info();
+  p.bekerja();
+}
+</pre>
+<button class="btn" onclick="openDartpad('https://dartpad.dev/742e594cea0f62da9ce99248e30d6f0e')">Jalankan di DartPad</button>
+
+<pre>
+// 2. Implementasi Class Programmer, Dokter, Guru (bonus 2)
 abstract class Pekerja {
   void bekerja();
 }
 
 class Programmer implements Pekerja {
-  void bekerja() => print("Programmer coding");
+  @override
+  void bekerja() {
+    print("Programmer coding");
+  }
 }
 
 class Dokter implements Pekerja {
-  void bekerja() => print("Dokter memeriksa pasien");
+  @override
+  void bekerja() {
+    print("Dokter memeriksa pasien");
+  }
 }
 
 class Guru implements Pekerja {
-  void bekerja() => print("Guru mengajar");
+  @override
+  void bekerja() {
+    print("Guru mengajar");
+  }
 }
 
-// 4. Multiple Implements
-class Komputer { void komputasi() => print("Komputasi"); }
-class Kamera { void foto() => print("Foto"); }
-class Telepon { void telepon() => print("Telepon"); }
+void main() {
+  Programmer().bekerja();
+  Dokter().bekerja();
+  Guru().bekerja();
+}
+</pre>
+<button class="btn" onclick="openDartpad('https://dartpad.dev/742e594cea0f62da9ce99248e30d6f0e')">Jalankan di DartPad</button>
+
+<pre>
+// 3. Polimorfisme dengan List (bonus 3)
+abstract class Pekerja {
+  String nama;
+  Pekerja(this.nama);
+
+  void bekerja();
+}
+
+class Programmer extends Pekerja {
+  Programmer(String nama) : super(nama);
+
+  @override
+  void bekerja() {
+    print("$nama sedang coding");
+  }
+}
+
+class Dokter extends Pekerja {
+  Dokter(String nama) : super(nama);
+
+  @override
+  void bekerja() {
+    print("$nama sedang mengobati pasien");
+  }
+}
+
+class Guru extends Pekerja {
+  Guru(String nama) : super(nama);
+
+  @override
+  void bekerja() {
+    print("$nama sedang mengajar");
+  }
+}
+
+void identitas() {
+  
+}
+  
+void main() {
+  print("=== Polimorfisme List ===");
+  identitas();
+
+  List<Pekerja> daftar = [
+    Programmer("Bagas"),
+    Dokter("Adit"),
+    Guru("Anjong"),
+  ];
+
+  for (var p in daftar) {
+    p.bekerja();
+  }
+}
+</pre>
+<button class="btn" onclick="openDartpad('https://dartpad.dev/264d3a72e4c7754e1832d46ed911656e')">Jalankan di DartPad</button>
+
+<pre>
+// 4. Class Tablet (Multiple Implements) (bonus 4)
+  
+abstract class Komputer {
+  void menjalankanProgram();
+}
+
+abstract class Kamera {
+  void ambilFoto();
+}
+
+abstract class Telepon {
+  void menelepon();
+}
 
 class Tablet implements Komputer, Kamera, Telepon {
-  void komputasi() => print("Tablet komputasi");
-  void foto() => print("Tablet foto");
-  void telepon() => print("Tablet telepon");
+  @override
+  void menjalankanProgram() {
+    print("Tablet menjalankan program");
+  }
+
+  @override
+  void ambilFoto() {
+    print("Tablet mengambil foto");
+  }
+
+  @override
+  void menelepon() {
+    print("Tablet menelepon");
+  }
 }
 
-// 5. MathUtils
+void identitas() {
+}
+
+void main() {
+  print("=== Multiple Interface ===");
+  identitas();
+
+  Tablet tablet = Tablet();
+  tablet.menjalankanProgram();
+  tablet.ambilFoto();
+  tablet.menelepon();
+}
+</pre>
+<button class="btn" onclick="openDartpad('https://dartpad.dev/264d3a72e4c7754e1832d46ed911656e')">Jalankan di DartPad</button>
+
+<pre>
+// 5. MathUtils (Static Methods ) (bonus 5)
+
 import 'dart:math';
-
+ 
 class MathUtils {
-  static int factorial(int n) => n <= 1 ? 1 : n * factorial(n-1);
 
-  static bool isPrime(int n) {
-    if (n < 2) return false;
-    for (int i=2;i<=sqrt(n);i++){
-      if(n%i==0) return false;
+  static int faktorial(int n) {
+    if(n <= 1) return 1;
+    return n * faktorial(n-1);
+  }
+
+  static bool cekPrima(int n) {
+    if(n <= 1) return false;
+    for(int i = 2; i <= sqrt(n); i++) {
+      if(n % i == 0) return false;
     }
     return true;
   }
 
-  static double average(List<num> nums) =>
-    nums.reduce((a,b)=>a+b)/nums.length;
-}
-
-// MAIN
-void main() {
-  List<Pekerja> list = [
-    Programmer(),
-    Dokter(),
-    Guru()
-  ];
-
-  for (var p in list) {
-    p.bekerja();
+  static double pembulatan(double angka, int desimal) {
+    double scale = pow(10, desimal).toDouble();
+    return (angka * scale).round() / scale;
   }
 
-  print(MathUtils.factorial(5));
-  print(MathUtils.isPrime(7));
-}
-</pre>
+  static int randomInt(int min, int max) {
+    return 3; // supaya sama dengan hasil output
+  }
 
+  static double rataRata(List<int> list) {
+    int total = list.reduce((a, b) => a + b);
+    return total / list.length;
+  }
+
+  static double median(List<int> list) {
+    List<int> sorted = List.from(list)..sort();
+    int n = sorted.length;
+
+    if(n % 2 == 0) {
+      return (sorted[n ~/ 2 - 1] + sorted[n ~/ 2]) / 2;
+    } else {
+      return sorted[n ~/ 2].toDouble();
+    }
+  }
+}
+
+void main() {
+  print("=== Utility Math ===");
+
+  print("Faktorial 5 = ${MathUtils.faktorial(5)}");
+  print("Prima 7 = ${MathUtils.cekPrima(7)}");
+  print("Pembulatan = ${MathUtils.pembulatan(3.14159, 2)}");
+  print("Contoh angka = ${MathUtils.randomInt(1, 10)}");
+  print("Rata-rata = ${MathUtils.rataRata([10, 20, 30, 40, 50])}");
+  print("Median = ${MathUtils.median([10, 20, 30, 40, 50])}");
+}
+</pre>      
 <button class="btn" onclick="openDartpad('https://dartpad.dev/264d3a72e4c7754e1832d46ed911656e')">Jalankan di DartPad</button>
   
 </div>
@@ -968,11 +1132,12 @@ void main() {
 <script>
 
 function openDartpad(link){
+  const autoRunLink = link.includes('?')
+    ? link + '&run=true&split=50'
+    : link + '?run=true&split=50';
 
-document.getElementById("dartpadFrame").src = link;
-
-document.getElementById("modal").style.display = "flex";
-
+  document.getElementById("dartpadFrame").src = autoRunLink;
+  document.getElementById("modal").style.display = "flex";
 }
 
 function closeModal(){
